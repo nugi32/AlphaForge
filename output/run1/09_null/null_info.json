@@ -1,0 +1,53 @@
+{
+  "summary": {
+    "real": {
+      "S": 0.0,
+      "S_cont": 2.197766430909251,
+      "n_surv": 0,
+      "n_cand": 0,
+      "n_pass_f2": 0,
+      "n_pass_all": 0,
+      "deep_used": "apriori+trees",
+      "deep_note": "the null test repeats the FULL deep stage (Apriori expansion AND tree engine) inside every replicate."
+    },
+    "variants": {
+      "calendar": {
+        "n_replicates": 100,
+        "below_minimum": false,
+        "S_threshold": 0.0,
+        "S_null_max": 0.0,
+        "p_global_S": 1.0,
+        "S_cont_threshold": 2.901059427631593,
+        "S_cont_null_max": 3.3563748136846434,
+        "p_global_S_cont": 0.15841584158415842,
+        "null_pass_f2_mean": 0.0,
+        "null_with_any_pass": 0.0,
+        "false_discovery_estimate": NaN
+      },
+      "random": {
+        "n_replicates": 100,
+        "below_minimum": false,
+        "S_threshold": 0.0,
+        "S_null_max": 0.0,
+        "p_global_S": 1.0,
+        "S_cont_threshold": 2.4159991758016326,
+        "S_cont_null_max": 3.122505718485482,
+        "p_global_S_cont": 0.1188118811881188,
+        "null_pass_f2_mean": 0.0,
+        "null_with_any_pass": 0.0,
+        "false_discovery_estimate": NaN
+      }
+    },
+    "min_replicates": 50,
+    "g1_pass": false,
+    "g1_reason": "fails: no rule passes F1-F2 on the real data; p_global_S=1.000 > 0.05; false discovery nan >= 0.5 or undefined"
+  },
+  "run": {
+    "week_bars": 120,
+    "embargo": 24,
+    "n_done": 200,
+    "n_computed": 200,
+    "complete": true,
+    "n_expected": 200
+  }
+}
