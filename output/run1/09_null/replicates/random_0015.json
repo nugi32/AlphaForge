@@ -1,0 +1,1 @@
+{"n_surv": 0, "n_deep": 42, "n_cand": 0, "S_cont": 1.3762031657512535, "S": 0.0, "n_pass_f2": 0, "n_pass_all": 0, "deep_used": "apriori+trees", "deep_note": "the null test repeats the FULL deep stage (Apriori expansion AND tree engine) inside every replicate.", "variant": "random", "rep": 15, "offset": 13749, "fingerprint": "6abad0d5494201b1", "seconds": 114.85}

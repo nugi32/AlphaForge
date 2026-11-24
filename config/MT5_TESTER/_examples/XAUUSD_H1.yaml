@@ -1,0 +1,26 @@
+# XAUUSD (emas) H1 - contoh; point 0.01, kontrak 100 oz. Sesuaikan dengan broker Anda.
+costs:
+  point: 0.01
+  digits: 2
+  contract_size: 100
+  fixed_spread_points: 25
+  slippage_points: 5
+  commission_per_lot_per_side: 0
+  swap_long_per_lot: -25.0
+  swap_short_per_lot: 8.0
+  swap_rollover_hour: 0
+  swap_triple_weekday: 4             # banyak broker membebankan swap 3 hari pada Jumat untuk emas; cek spesifikasi broker
+
+engine:
+  fidelity: open_prices_only
+  initial_deposit: 10000.0
+  sizing_mode: fixed_lots
+  fixed_lots: 0.05
+  lot_min: 0.01
+  no_weekend_hold: true
+
+backtest:
+  segments: [train, val]
+  account_currency: USD
+  chart:
+    height: 9.0

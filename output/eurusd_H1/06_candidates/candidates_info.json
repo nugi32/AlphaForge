@@ -1,0 +1,24 @@
+{
+  "funnel": {
+    "survivors": 94,
+    "episodes": 0,
+    "t": 0,
+    "lift": 0
+  },
+  "max_t_exact": 0.0,
+  "n_train_rows": 4034,
+  "n_folds": 5,
+  "n_families": {
+    "long": 42,
+    "short": 42
+  },
+  "with_upstream": {
+    "tree": 94
+  },
+  "n_candidates": 0,
+  "n_clusters": 0,
+  "seconds": 0.94,
+  "n_both_directions": 0,
+  "by_depth": {},
+  "by_source": {}
+}

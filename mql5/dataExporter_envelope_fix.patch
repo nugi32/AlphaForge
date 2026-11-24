@@ -1,0 +1,14 @@
+--- a/mql5/dataExporter.mq5
++++ b/mql5/dataExporter.mq5
+@@ -821,8 +821,9 @@
+     if (GetIndicatorValue(g_handles.stddev_20, bar_index, value)) result += "," + DoubleToString(value, 6); else result += ",NaN";
+ 
+     // Envelopes
+-    if (GetIndicatorValue(g_handles.envelope_20_01, bar_index, value, 1)) result += "," + DoubleToString(value, 6); else result += ",NaN"; // Upper
+-    if (GetIndicatorValue(g_handles.envelope_20_01, bar_index, value, 2)) result += "," + DoubleToString(value, 6); else result += ",NaN"; // Lower
++    // iEnvelopes buffers: 0 = upper, 1 = lower (there is no buffer 2; reading 1/2 exported the lower band as "upper" and NaN as "lower")
++    if (GetIndicatorValue(g_handles.envelope_20_01, bar_index, value, 0)) result += "," + DoubleToString(value, 6); else result += ",NaN"; // Upper
++    if (GetIndicatorValue(g_handles.envelope_20_01, bar_index, value, 1)) result += "," + DoubleToString(value, 6); else result += ",NaN"; // Lower
+ 
+     return result;
+ }

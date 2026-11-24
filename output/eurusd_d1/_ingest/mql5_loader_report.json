@@ -1,0 +1,84 @@
+{
+  "repairs": [
+    "envelope: 'envelope_20_01_upper' held the LOWER band (median value / SMA20 = 0.999000 < 1) and 'envelope_20_01_lower' was all NaN; moved it to 'envelope_20_01_lower' and rebuilt 'envelope_20_01_upper' = 2 * ma_20_sma - lower (fix the exporter too: see schema.ENVELOPE_MQL5_FIX)"
+  ],
+  "findings": [
+    {
+      "level": "ok",
+      "check": "ohlc",
+      "message": "OHLC consistent"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_2_middle",
+      "message": "bb_20_2_middle equals ma_20_sma (max abs diff 0.00e+00)"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_2_deviation",
+      "message": "bb_20_2: (upper - middle) / stddev_20 = 2.000 (expected 2.0)"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_2_symmetry",
+      "message": "bb_20_2 symmetric around the middle band"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_15_middle",
+      "message": "bb_20_15_middle equals ma_20_sma (max abs diff 0.00e+00)"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_15_deviation",
+      "message": "bb_20_15: (upper - middle) / stddev_20 = 1.500 (expected 1.5)"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_15_symmetry",
+      "message": "bb_20_15 symmetric around the middle band"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_25_middle",
+      "message": "bb_20_25_middle equals ma_20_sma (max abs diff 0.00e+00)"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_25_deviation",
+      "message": "bb_20_25: (upper - middle) / stddev_20 = 2.500 (expected 2.5)"
+    },
+    {
+      "level": "ok",
+      "check": "bb_20_25_symmetry",
+      "message": "bb_20_25 symmetric around the middle band"
+    },
+    {
+      "level": "ok",
+      "check": "envelope",
+      "message": "envelope upper > SMA20 > lower, deviation 0.100% of SMA"
+    },
+    {
+      "level": "info",
+      "check": "volumes",
+      "message": "volumes == tick_volume (iVolume written twice; the duplicate is collapsed by feature clustering)"
+    },
+    {
+      "level": "info",
+      "check": "real_volume",
+      "message": "real_volume is always 0 (no exchange volume for this symbol); the feature is dropped by QA as constant"
+    },
+    {
+      "level": "ok",
+      "check": "spread",
+      "message": "spread > 0 on 1.7% of bars (median 10.5 pts); rows with 0 use the last known spread, then the configured fixed spread"
+    },
+    {
+      "level": "warn",
+      "check": "news",
+      "message": "all news_* columns are NaN: the calendar CSV was not loaded in the tester (run the exporter once on a live chart first)"
+    }
+  ],
+  "unprocessed": [],
+  "spread_source": "data column 'spread'"
+}

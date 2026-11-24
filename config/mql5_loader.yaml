@@ -1,0 +1,16 @@
+# Settings for MQL5 loader mode: ONE CSV from mql5/dataExporter.mq5 carries bars, spread and every indicator column.
+# Used together with config/default.yaml (deep-merged over it). Symbol / timeframe dependent values (bars per year, gap threshold, digits / point,
+# fallback spread) are derived from the file itself by edge_research.mql5_loader.runner and are NOT set here; put your own overrides in a --config file
+# or in config/MT5_TESTER/<SYMBOL>/<TF>.yaml (costs / engine only).
+data:
+  source: mql5_loader          # switches on the loader hooks (envelope repair, spread from the data table, extension features, coverage guard)
+  spread_from_data: true       # per-bar spread comes from the 'spread' column of the SAME csv (no second file)
+  allow_unprocessed: false     # true = do not stop when an exporter column is read by no feature
+
+qa:
+  nan_column_threshold_by_prefix:   # NaN is legitimate in calendar columns: no forecast (news_last_surprise), no later event (news_min_to_next), nothing before the first event
+    news_: 0.5
+
+features:
+  include_calendar_news: true  # the exporter computes news_* inside the tester from a calendar CSV, with the bar close as reference time (no look-ahead);
+                               # they are research features that the EA generator refuses (not reproducible in the tester). false = gate them off.

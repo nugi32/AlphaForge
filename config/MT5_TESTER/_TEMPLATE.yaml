@@ -1,0 +1,39 @@
+# Salin ke config/MT5_TESTER/<SYMBOL>/<TF>.yaml (contoh: config/MT5_TESTER/EURUSD/H1.yaml) lalu sesuaikan dengan broker / akun untuk pair itu.
+# Hanya section costs, engine dan backtest yang boleh ada di file ini; section lain ditolak. File tidak ada = pakai config global.
+# Semua nilai di bawah ini ADALAH CONTOH, bukan angka broker Anda: ambil dari Market Watch -> Specification di MT5.
+costs:
+  point: 0.00001                  # ukuran 1 point (EURUSD 5 digit = 0.00001; XAUUSD 2 digit = 0.01)
+  digits: 5
+  contract_size: 100000           # EURUSD 100000, XAUUSD 100
+  fixed_spread_points: 10         # fallback bila kolom spread di CSV = 0 / belum ada
+  slippage_points: 1
+  commission_per_lot_per_side: 3.5
+  swap_long_per_lot: -7.0
+  swap_short_per_lot: 2.5
+  swap_rollover_hour: 0
+  swap_triple_weekday: 2          # 0 = Senin ... 2 = Rabu
+
+engine:
+  fidelity: open_prices_only      # satu-satunya nilai yang didukung
+  initial_deposit: 10000.0
+  sizing_mode: fixed_lots         # fixed_lots | risk_percent
+  fixed_lots: 0.10
+  risk_percent: 1.0
+  lot_step: 0.01
+  lot_min: 0.01
+  lot_max: 100.0
+  max_open_positions: 1
+  cost_multiplier: 1.0
+  no_weekend_hold: true
+
+backtest:
+  segments: [train, val]          # train | val | all (holdout hanya dibuka oleh stage validasi)
+  account_currency: USD           # label sumbu uang pada chart
+  chart:                          # chart equity + balance -> <run>/11_backtest/<segment>/equity_balance.png
+    enabled: true
+    dpi: 150
+    width: 14.0
+    height: 8.0
+    drawdown_panel: true
+    crop_to_trades: true
+    stats_box: true

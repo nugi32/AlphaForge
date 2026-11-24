@@ -1,0 +1,21 @@
+{
+  "stages": {
+    "00_data_qa": {
+      "fingerprint": "51b5f7f9bf44dbcb",
+      "status": "done"
+    },
+    "01_features": {
+      "fingerprint": "2fa79a4bae9245ca",
+      "status": "done"
+    },
+    "02_labels": {
+      "fingerprint": "07eb4d32cddeb7ed",
+      "status": "done"
+    }
+  },
+  "holdout_accesses": [],
+  "package_version": "0.2.0",
+  "seed": 12345,
+  "data_hash": "ab13b6db19a196149de38494c63dfbd9",
+  "config_hash": "8b0a693d3ceae2b7"
+}

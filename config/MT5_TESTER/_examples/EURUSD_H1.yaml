@@ -1,0 +1,23 @@
+# EURUSD H1 - contoh; sesuaikan dengan spesifikasi broker Anda.
+costs:
+  point: 0.00001
+  digits: 5
+  contract_size: 100000
+  fixed_spread_points: 7
+  slippage_points: 1
+  commission_per_lot_per_side: 3.5
+  swap_long_per_lot: -8.3
+  swap_short_per_lot: 3.1
+  swap_rollover_hour: 0
+  swap_triple_weekday: 2
+
+engine:
+  fidelity: open_prices_only
+  initial_deposit: 10000.0
+  sizing_mode: fixed_lots
+  fixed_lots: 0.10
+  no_weekend_hold: true
+
+backtest:
+  segments: [train, val]
+  account_currency: USD

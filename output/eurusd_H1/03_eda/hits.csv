@@ -1,0 +1,1 @@
+feature,categorical,bin,bin_lo,bin_hi,label,n,mean_R,se,lift_R,mean_gross_R,se_gross,lift_gross_R,periods_used,frac_pos_periods,direction,family,t_lift,t_lift_gross,t_gross,ci_lo,ci_hi,hit,consistent

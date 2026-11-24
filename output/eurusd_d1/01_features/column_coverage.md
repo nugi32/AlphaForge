@@ -1,0 +1,114 @@
+# Exporter column coverage (after stage 1)
+
+Verdicts: exempt=1, qa_excluded=11, used=96
+
+| column | group | verdict | built | kept | detail |
+|---|---|---|---|---|---|
+| `time` | bar | exempt | 0/0 | 0 | bar timestamp: becomes the index of every table |
+| `open` | bar | used | 4/4 | 4 | kept as cluster representative: candle_body, candle_lower_wick, candle_upper_wick, gap_atr |
+| `high` | bar | used | 6/6 | 6 | kept as cluster representative: breakout_up_20, candle_close_pos, candle_range, candle_upper_wick |
+| `low` | bar | used | 6/6 | 6 | kept as cluster representative: breakout_down_20, candle_close_pos, candle_lower_wick, candle_range |
+| `close` | bar | used | 61/61 | 61 | kept as cluster representative: bb_mid_dist_bb_20_15, bb_mid_dist_bb_20_2, bb_mid_dist_bb_20_25, breakout_down_20 |
+| `tick_volume` | bar | used | 1/1 | 1 | kept as cluster representative: tick_volume_rel |
+| `real_volume` | bar | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `spread` | bar | used | 2/2 | 2 | kept as cluster representative: spread_atr, spread_rel |
+| `ma_5_sma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_5_sma |
+| `ma_5_ema` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_5_ema |
+| `ma_5_smma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_5_smma |
+| `ma_5_lwma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_5_lwma |
+| `ma_10_sma` | ma | used | 4/4 | 4 | kept as cluster representative: bars_since_ma10_20_cross_down, bars_since_ma10_20_cross_up, dist_ma_10_sma, rel_ma_10_sma_ma_20_sma |
+| `ma_10_ema` | ma | used | 2/2 | 2 | kept as cluster representative: dist_ma_10_ema, rel_ma_10_ema_ma_20_ema |
+| `ma_10_smma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_10_smma |
+| `ma_10_lwma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_10_lwma |
+| `ma_20_sma` | ma | used | 7/7 | 7 | kept as cluster representative: bars_since_ma10_20_cross_down, bars_since_ma10_20_cross_up, dist_ma_20_sma, rel_ma_10_sma_ma_20_sma |
+| `ma_20_ema` | ma | used | 5/5 | 5 | kept as cluster representative: dist_ma_20_ema, rel_ma_10_ema_ma_20_ema, rel_ma_20_ema_ma_50_ema, slope_ma_20_ema_10 |
+| `ma_20_smma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_20_smma |
+| `ma_20_lwma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_20_lwma |
+| `ma_50_sma` | ma | used | 5/5 | 5 | kept as cluster representative: dist_ma_50_sma, rel_ma_20_sma_ma_50_sma, rel_ma_50_sma_ma_200_sma, slope_ma_50_sma_10 |
+| `ma_50_ema` | ma | used | 5/5 | 5 | kept as cluster representative: dist_ma_50_ema, rel_ma_20_ema_ma_50_ema, rel_ma_50_ema_ma_200_ema, slope_ma_50_ema_10 |
+| `ma_50_smma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_50_smma |
+| `ma_50_lwma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_50_lwma |
+| `ma_100_sma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_100_sma |
+| `ma_100_ema` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_100_ema |
+| `ma_100_smma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_100_smma |
+| `ma_100_lwma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_100_lwma |
+| `ma_200_sma` | ma | used | 2/2 | 2 | kept as cluster representative: dist_ma_200_sma, rel_ma_50_sma_ma_200_sma |
+| `ma_200_ema` | ma | used | 2/2 | 2 | kept as cluster representative: dist_ma_200_ema, rel_ma_50_ema_ma_200_ema |
+| `ma_200_smma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_200_smma |
+| `ma_200_lwma` | ma | used | 1/1 | 1 | kept as cluster representative: dist_ma_200_lwma |
+| `dema_10` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_dema_10 |
+| `dema_20` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_dema_20 |
+| `dema_50` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_dema_50 |
+| `tema_10` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_tema_10 |
+| `tema_20` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_tema_20 |
+| `tema_50` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_tema_50 |
+| `frama_14` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_frama_14 |
+| `frama_20` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_frama_20 |
+| `ama_10_2_30` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_ama_10_2_30 |
+| `vidya_9` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_vidya_9 |
+| `vidya_12` | adaptive_ma | used | 1/1 | 1 | kept as cluster representative: dist_vidya_12 |
+| `sar_002_02` | trend | used | 1/1 | 1 | kept as cluster representative: dist_sar_002_02 |
+| `sar_001_02` | trend | used | 1/1 | 1 | kept as cluster representative: dist_sar_001_02 |
+| `sar_003_02` | trend | used | 1/1 | 1 | kept as cluster representative: dist_sar_003_02 |
+| `adx_14` | trend | used | 1/1 | 1 | kept as cluster representative: adx_14 |
+| `adxwilder_14` | trend | used | 1/1 | 1 | kept as cluster representative: adxwilder_14 |
+| `rsi_7` | oscillator | used | 1/1 | 1 | kept as cluster representative: rsi_7 |
+| `rsi_14` | oscillator | used | 3/3 | 3 | kept as cluster representative: bars_since_rsi14_above70, bars_since_rsi14_below30, rsi_14 |
+| `rsi_21` | oscillator | used | 1/1 | 1 | kept as cluster representative: rsi_21 |
+| `stoch_5_3_3_k` | oscillator | used | 1/1 | 1 | kept as cluster representative: stoch_5_3_3_k |
+| `stoch_5_3_3_d` | oscillator | used | 1/1 | 1 | kept as cluster representative: stoch_5_3_3_d |
+| `stoch_14_3_3_k` | oscillator | used | 1/1 | 1 | kept as cluster representative: stoch_14_3_3_k |
+| `stoch_14_3_3_d` | oscillator | used | 1/1 | 1 | kept as cluster representative: stoch_14_3_3_d |
+| `cci_14` | oscillator | used | 1/1 | 1 | kept as cluster representative: cci_14 |
+| `cci_20` | oscillator | used | 1/1 | 1 | kept as cluster representative: cci_20 |
+| `wpr_14` | oscillator | used | 1/1 | 1 | kept as cluster representative: wpr_14 |
+| `mom_10` | oscillator | used | 1/1 | 1 | kept as cluster representative: mom_10_c |
+| `mom_14` | oscillator | used | 1/1 | 1 | kept as cluster representative: mom_14_c |
+| `macd_12_26_9_main` | oscillator | used | 2/2 | 2 | kept as cluster representative: macd_12_26_9_main_atr, macd_hist_atr |
+| `macd_12_26_9_signal` | oscillator | used | 2/2 | 2 | kept as cluster representative: macd_12_26_9_signal_atr, macd_hist_atr |
+| `osma_12_26_9` | oscillator | used | 1/1 | 1 | kept as cluster representative: osma_12_26_9_atr |
+| `demarker_14` | oscillator | used | 1/1 | 1 | kept as cluster representative: demarker_14 |
+| `rvi_10` | oscillator | used | 1/1 | 1 | kept as cluster representative: rvi_10 |
+| `trix_14` | oscillator | used | 1/1 | 1 | kept as cluster representative: trix_14 |
+| `ac` | oscillator | used | 1/1 | 1 | kept as cluster representative: ac_atr |
+| `ao` | oscillator | used | 1/1 | 1 | kept as cluster representative: ao_atr |
+| `bears_13` | oscillator | used | 1/1 | 1 | kept as cluster representative: bears_13_atr |
+| `bulls_13` | oscillator | used | 1/1 | 1 | kept as cluster representative: bulls_13_atr |
+| `atr_14` | volatility | used | 2/2 | 2 | kept as cluster representative: atr_ratio, atr_ratio_14_20 |
+| `atr_20` | volatility | used | 1/1 | 1 | kept as cluster representative: atr_ratio_14_20 |
+| `bb_20_2_upper` | volatility | used | 2/2 | 2 | kept as cluster representative: bbwidth_bb_20_2, pctb_bb_20_2 |
+| `bb_20_2_middle` | volatility | used | 1/1 | 1 | kept as cluster representative: bb_mid_dist_bb_20_2 |
+| `bb_20_2_lower` | volatility | used | 2/2 | 2 | kept as cluster representative: bbwidth_bb_20_2, pctb_bb_20_2 |
+| `bb_20_15_upper` | volatility | used | 2/2 | 2 | kept as cluster representative: bbwidth_bb_20_15, pctb_bb_20_15 |
+| `bb_20_15_middle` | volatility | used | 1/1 | 1 | kept as cluster representative: bb_mid_dist_bb_20_15 |
+| `bb_20_15_lower` | volatility | used | 2/2 | 2 | kept as cluster representative: bbwidth_bb_20_15, pctb_bb_20_15 |
+| `bb_20_25_upper` | volatility | used | 2/2 | 2 | kept as cluster representative: bbwidth_bb_20_25, pctb_bb_20_25 |
+| `bb_20_25_middle` | volatility | used | 1/1 | 1 | kept as cluster representative: bb_mid_dist_bb_20_25 |
+| `bb_20_25_lower` | volatility | used | 2/2 | 2 | kept as cluster representative: bbwidth_bb_20_25, pctb_bb_20_25 |
+| `stddev_20` | volatility | used | 1/1 | 1 | kept as cluster representative: stddev_atr |
+| `envelope_20_01_upper` | volatility | used | 2/2 | 2 | kept as cluster representative: env_pctb_envelope_20_01, env_width_envelope_20_01 |
+| `envelope_20_01_lower` | volatility | used | 2/2 | 2 | kept as cluster representative: env_pctb_envelope_20_01, env_width_envelope_20_01 |
+| `obv` | volume | used | 1/1 | 1 | kept as cluster representative: obv_chg6_z |
+| `ad` | volume | used | 1/1 | 1 | kept as cluster representative: ad_chg6_z |
+| `mfi_14` | volume | used | 1/1 | 1 | kept as cluster representative: mfi_14 |
+| `force_13` | volume | used | 1/1 | 1 | kept as cluster representative: force_13_z |
+| `chaikin_3_10` | volume | used | 1/1 | 1 | kept as cluster representative: chaikin_z |
+| `volumes` | volume | used | 1/1 | 1 | kept as cluster representative: volumes_rel |
+| `volregime_atr_pctl` | custom_volregime | used | 1/1 | 1 | kept as cluster representative: volregime_atr_pctl |
+| `volregime_atr_ratio` | custom_volregime | used | 1/1 | 1 | kept as cluster representative: volregime_atr_ratio |
+| `volregime_regime` | custom_volregime | used | 1/1 | 1 | kept as cluster representative: volregime_regime |
+| `ps_dist_pdh_atr` | custom_pricestructure | used | 1/1 | 1 | kept as cluster representative: ps_dist_pdh_atr |
+| `ps_dist_pdl_atr` | custom_pricestructure | used | 1/1 | 1 | kept as cluster representative: ps_dist_pdl_atr |
+| `ps_dist_sess_h_atr` | custom_pricestructure | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: 19.9% NaN after warm-up |
+| `ps_dist_sess_l_atr` | custom_pricestructure | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: 19.9% NaN after warm-up |
+| `ps_dist_round_up_atr` | custom_pricestructure | used | 1/1 | 1 | kept as cluster representative: ps_dist_round_up_atr |
+| `ps_dist_round_dn_atr` | custom_pricestructure | used | 1/1 | 1 | kept as cluster representative: ps_dist_round_dn_atr |
+| `ps_gap_atr` | custom_pricestructure | used | 1/1 | 1 | kept as cluster representative: ps_gap_atr |
+| `ps_gap_fill_pct` | custom_pricestructure | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `news_min_to_next` | news | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `news_next_importance` | news | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `news_min_since_last` | news | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `news_last_importance` | news | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `news_last_surprise` | news | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `news_in_window` | news | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |
+| `news_count_next_24h` | news | qa_excluded | 0/1 | 0 | stage 0 QA removed the column: constant or all-NaN |

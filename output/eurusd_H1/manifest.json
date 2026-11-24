@@ -1,0 +1,70 @@
+{
+  "stages": {
+    "00_data_qa": {
+      "fingerprint": "6c913ee30ad32cf8",
+      "status": "done"
+    },
+    "01_features": {
+      "fingerprint": "2ed417db04a0bc1e",
+      "status": "done"
+    },
+    "02_labels": {
+      "fingerprint": "6781ea68bc0454b4",
+      "status": "done"
+    },
+    "03_eda": {
+      "fingerprint": "f52f9bc484ee00a9",
+      "status": "done",
+      "verdict": "NO_GO"
+    },
+    "04_atoms": {
+      "fingerprint": "2fe49e84510b39fd",
+      "status": "done",
+      "n_atoms": 1197
+    },
+    "05_discovery": {
+      "fingerprint": "81f0678ccf2223b4",
+      "status": "done",
+      "n_survivors": 0
+    },
+    "05b_deep": {
+      "fingerprint": "61f16901fef55d6c",
+      "upstream": "81f0678ccf2223b4",
+      "status": "done",
+      "n_deep": 94
+    },
+    "06_candidates": {
+      "fingerprint": "d3efb72587f9239b",
+      "upstream": "81f0678ccf2223b4|61f16901fef55d6c",
+      "status": "done",
+      "n_candidates": 0,
+      "n_clusters": 0,
+      "by_depth": {}
+    },
+    "07_filters": {
+      "fingerprint": "6f85ef87a221c218",
+      "upstream": "d3efb72587f9239b",
+      "status": "done",
+      "n_passed": 0,
+      "n_clusters": 0
+    },
+    "08_exits": {
+      "fingerprint": "c1b3ae6bb8be9838",
+      "upstream": "6f85ef87a221c218",
+      "status": "done",
+      "n_frozen": 0,
+      "n_pass_f3": 0
+    },
+    "09_null": {
+      "fingerprint": "1263579a53b31dc9",
+      "upstream": "c1b3ae6bb8be9838",
+      "status": "done",
+      "g1_pass": false
+    }
+  },
+  "holdout_accesses": [],
+  "package_version": "0.2.0",
+  "seed": 12345,
+  "data_hash": "617695beee2533846280854daf621d9e",
+  "config_hash": "615febd4e3770f6a"
+}

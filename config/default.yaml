@@ -1,0 +1,219 @@
+# Edge Research V2 default configuration. All values are starting points, not sacred numbers.
+data:
+  timeframe: H1
+  timeframe_minutes: 60
+  train_pct: 0.60
+  val_pct: 0.22
+  holdout_pct: 0.18
+  embargo_margin_bars: 6
+  max_gap_hours: 6.0          # null disables the weekend-hold exclusion
+
+qa:
+  min_time_parse_fraction: 0.99
+  gap_factor: 2.0
+  nan_column_threshold: 0.01
+  alignment_tolerance: 1.0e-4
+  expected_bars_per_year: 6000   # H1, 24h x 5 days (about 6200)
+  bars_per_year_tolerance: 0.25
+
+features:
+  atr_column: atr_14
+  corr_cluster_threshold: 0.9
+  roll_window_vol: 100
+  roll_window_volume: 100
+  include_calendar_news: false
+  mom_center: 100.0            # iMomentum is centred at 100; set 0 if the export is centred at 0 (QA flags the centre)
+  event_cap_bars: 50
+  breakout_n: 20
+  return_k: [1, 3, 6, 12, 24]
+  slope_k: [3, 10]
+  nbar_hilo: [20, 50]
+  leakcheck: auto              # spec 6.5 acceptance: automatic look-ahead test. auto = runs when the bar count is <= 200k; true / false force it.
+
+labels:
+  atr_column: atr_14
+  time_stops: [1, 2, 3, 6, 12, 24]
+  barrier_grid:
+    tp: [1, 2, 3]
+    sl: [1, 1.5, 2]
+    horizon: [12, 24]
+  intrabar_families: true       # also build I{tp}_{sl}_{H} intrabar exits (spec 15.4 S{...}, research only) on the SAME grid; needs high/low columns
+  cat_stop_atr: null            # when set: a WIDE intrabar stop (ATR units) layered on EVERY label family and on the engine (pessimistic); needs high/low
+
+costs:
+  point: 0.00001
+  digits: 5
+  contract_size: 100000
+  fixed_spread_points: 12
+  slippage_points: 0
+  commission_per_lot_per_side: 0
+  swap_long_per_lot: 0
+  swap_short_per_lot: 0
+  swap_rollover_hour: 0
+  swap_triple_weekday: 2
+
+seed: 12345
+
+engine:                        # backtest engine (M2b, M9). An unknown key is an error.
+  fidelity: open_prices_only   # the Strategy Tester mode the whole pipeline is built on; the ONLY supported value
+  reenter_on_exit_bar: false   # false: no new entry on the bar whose open closed a position (old tester behaviour)
+  conflict_policy: skip        # long and short signal on the same bar: "skip" drops both (ambiguous decision)
+  max_open_positions: 1        # per rule; signals are ignored while the limit is reached
+  close_open_at_end: false     # true: a position that would run past the data is closed at the last bar open (reason "end") instead of being skipped
+  cost_multiplier: 1.0         # multiplies spread and slippage (cost stress)
+  no_weekend_hold: true        # a window that crosses a data gap (weekend / holiday, data.max_gap_hours) is not traded
+  cat_stop_atr: null           # catastrophic intrabar stop in ATR (needs high / low); null = off. A rule can carry its own
+  account_mode: hedging        # hedging | netting (netting is NOT emulated; a warning is issued)
+  sizing_mode: fixed_lots      # fixed_lots | risk_percent (risk_percent needs a stop: B / I exit or cat_stop_atr)
+  fixed_lots: 0.10
+  risk_percent: 1.0            # of the balance at entry (initial deposit unless compounding)
+  lot_step: 0.01
+  lot_min: 0.01
+  lot_max: 100.0
+  initial_deposit: 10000.0
+  compounding: false           # risk_percent sizing from the realised balance instead of the initial deposit
+
+backtest:                      # what a backtest run (stage 11, scripts/run_backtest.py) writes. Can be overridden per symbol / TF in config/MT5_TESTER/<SYMBOL>/<TF>.yaml
+  segments: [train, val]       # stage 11 segments (train | val | all); the holdout is opened only by the validation stage
+  account_currency: ""         # label of the money axis in the chart (the engine assumes deposit currency == quote currency, NOTES D-006)
+  symbol: null                 # label only (chart title / report); filled in by the MQL5 loader runner and by run_backtest.py --symbol
+  chart:                       # equity + balance chart, written as <segment>/equity_balance.png next to report.md
+    enabled: true
+    filename: equity_balance.png
+    dpi: 150
+    width: 14.0                # inches
+    height: 8.0
+    drawdown_panel: true       # lower panel with the equity drawdown (% of the running peak)
+    crop_to_trades: true       # cut the flat stretch before the first entry / after the last exit
+    stats_box: true            # trades, net profit, final balance, PF, max equity DD, expectancy in the chart
+
+deep:                          # Stage 5b (M11, spec 10.2 step 6 + 10.3): widening the search to 3-4 atom rules and to a second engine.
+  apriori:                     # Engine A depth 3-4: extend every surviving pair / triple by one atom, screened exactly like depth 2.
+    enabled: true
+    max_atoms: 4               # hard cap on atoms per rule (spec 10.2: maximum 4)
+    beam_triple: 5000          # triples: extend only the best-scoring N couples (spec default)
+    beam_quad: 2000            # quads: extend only the best-scoring N triples
+    tile: 256                  # atom columns per tile on BOTH sides (memory: tile x tile x folds x labels)
+    max_survivors: 100000      # cap of the deep survivors handed to stage 6 (truncation is flagged)
+    include_in_null: true      # spec 13.3: the null test must repeat the IDENTICAL procedure, so the expansion runs inside EVERY replicate (much slower; if too expensive reduce nulltest.replicates >= 50, never widen the procedure).
+  trees:                       # Engine B (spec 10.3): shallow trees on the atom quantile ladder; independent of Engine A.
+    enabled: true
+    max_depth: [3, 4]          # spec 10.3: "kedalaman 3-4" — the engine runs one pass per listed depth; one integer is also accepted
+    include_in_null: true      # spec 13.3: identical procedure inside every replicate (deterministic seed; slower — reduce replicates, never widen)
+    families: [T6, B2_1_12]    # label columns the trees are induced on, one at a time, per direction
+    n_trees: 200
+    min_leaf_rows: 200         # by intent equal to candidates.min_episodes_train: a leaf must hold enough rows to deserve an episode check
+    feature_frac: 0.4          # share of features (with a quantile ladder) drawn per tree
+    winsor_R: 3.0              # the target is winsorized at +-this many R
+    min_hits: 2                # a rule must appear in at least this many trees
+    max_rules: 2000
+    seed: null                 # null = the global seed; the engine must be a deterministic function of the config (null-test requirement)
+
+reporting:                     # Stage 13 (M12, spec 17.1): RUN_SUMMARY.md, the per-rule reports and the gate log
+  run_summary: true
+  per_rule_reports: true       # one backtest report per accepted rule (train and validation), one account per rule
+  per_rule_segments: [train, val]
+  max_per_rule: 25             # cap on the number of per-rule reports (best train plateau first)
+
+eda:
+  n_bins: 10
+  max_categorical_levels: 10   # features with <= this many distinct values (and all "time" features) get one bin per value
+  cluster: week                # cluster-robust SE: calendar weeks (overlapping label windows share price paths)
+  min_n_cell: 200              # minimum rows in a (feature, bin, label) cell to count as a hit
+  min_n_period: 50             # minimum rows in a cell-period for that period to be used in the consistency check
+  min_periods: 3               # minimum usable periods; train spans < min_periods years -> quarters are used instead of years
+  t_min: auto                  # "auto" = one-sided Bonferroni over the tested cells at `alpha`; or a fixed number
+  alpha: 0.05
+  min_t_gross_mean: 2.0        # the cell's own gross mean must also be positive (t >= this), not only better than the baseline
+  stop_on_no_go: false         # spec says stop on NO_GO; default false because univariate cannot see conjunction edges (NOTES Q-003)
+  min_frac_positive_periods: 0.7
+  weak_lift_R: 0.05            # best consistent lift below this -> verdict GO_WEAK
+
+atoms:
+  quantile_pcts: [10, 20, 30, 40, 50, 60, 70, 80, 90]
+  min_support: 0.01            # an atom (and its complement) is dropped when its support on train rows is outside [min_support, 1 - min_support]
+  max_categorical_levels: 10   # same rule as eda: "time" features and features with <= this many distinct train values get one == atom per value
+  threshold_sig_digits: 6      # thresholds are rounded to this many significant digits BEFORE masks are built (the stored number is the rule)
+
+discovery:
+  screen_families: [T3, T12, B2_1_12]   # coarse-screen labels; both directions of each (6 labels). Full label set is used on survivors (M5)
+  target: net                  # "net" (after costs) or "gross"; rules must pay for their costs, so net is the default
+  n_folds: 5                   # contiguous time blocks of the train segment
+  min_rows_screen: 500         # minimum valid rows of a pair (all train); raise for lower timeframes
+  min_rows_fold: 20            # a fold counts as positive only with at least this many valid rows and a positive sum
+  t_screen: 2.0                # coarse t = mean / (sd / sqrt(n / hold)); hold-length deflation for overlapping trades
+  min_pos_folds: 4             # of n_folds
+  min_labels_pass: 2           # a (pair, direction) survives if it passes all filters on this many of that direction's screening labels
+  tile: 256                    # atom columns per tile (memory: tile^2 x folds x labels x 2 float64)
+  chunk_rows: 4096             # rows per matrix product
+  matmul_dtype: float32        # products are accumulated in float64; counts are exact in float32 (integers < 2^24)
+  max_survivors: 100000        # cap by score (sum of coarse t over passing labels); truncation is flagged in the info
+
+candidates:                    # Stage 6 (M5): exact statistics on the survivors of Stage 5, lift over parents, dedup (spec 10.4, 10.5, 11)
+  dedup_corr: 0.7              # F9 second criterion: P&L-series correlation >= this also merges two candidates into one cluster (spec 11)
+  cluster_extra: null          # spec 10.4 optional cross-clustering: "week" = calendar-week clusters; the CONSERVATIVE (larger) SE is used. null = off
+  bootstrap_n: 200             # block-bootstrap draws for the best-family mean CI of each candidate (spec 10.4)
+  min_episodes_train: 200      # a family counts only with at least this many episodes (episode gap = hold of that family); raise for M5/M1 data
+  t_exact: 2.5                 # cluster-robust t of the mean on the trigger episodes (spec F1)
+  lift_t_min: 1.5              # one-sided t of mean(P&C) - mean(P&~C) for BOTH parents (spec F5 / 10.5)
+  lift_block_mult: 5           # lift clusters = fixed time blocks of this many x hold bars (parent episodes collapse to one cluster for a dense parent)
+  min_families_pass: 2         # a candidate needs episodes, t and lift together on this many label families of its direction (partial F3)
+  dedup_jaccard: 0.6           # leader clustering on trigger rows, same direction only (spec F9 default); the best-ranked member is the representative
+  cache_atoms: 4096            # dense atom masks kept in memory while evaluating survivors
+
+filters:
+  f8_enabled: true             # F8 (spec 11): backward elimination on the VALIDATION rows — drop an atom when the simpler rule does not fall beyond noise
+  f8_noise_se: 1.0             # noise = this many cluster SEs of the ORIGINAL rule's validation mean                       # Stage 7 (M5b): candidate filters F2, F4, F6, F7 on the best family of each candidate, then dedup again (spec 11)
+  min_pos_folds: 4             # F2: folds (of discovery.n_folds) with a positive mean
+  min_pos_period_share: 0.7    # F2: share of usable periods (years; quarters when the train spans fewer than `min_periods` years) with a positive mean
+  min_periods: 3
+  min_episodes_period: 10      # F2: a period with fewer episodes is not counted
+  max_period_profit_share: 0.5 # F2: no fold and no period may hold more than this share of the total profit
+  max_top5_episode_share: 0.30 # F2: the 5 largest episodes may hold at most this share of the total profit
+  min_loyo_share: 0.8          # F2: leave-one-period-out keeps the mean positive in at least this share of cases
+  cost_stress_mult: 1.5        # F7: mean must stay > 0 with spread, slippage, commission and swap multiplied by this
+  plateau_steps: 2             # F4: thresholds shifted by +-1..steps neighbours (same feature and operator) one atom at a time
+  plateau_min_ratio: 0.5       # F4: median neighbour mean >= this x the original mean
+  plateau_min_pos_share: 0.8   # F4: share of neighbours with a positive mean
+  plateau_min_obs: 30          # a neighbour with fewer observations counts as "no result" (not positive)
+  mono_min_points: 4           # F6 soft score: needs this many thresholds of the feature
+
+exits:                         # Stage 8 (M6): exit selection on the smoothed surface (spec 12) and F3 (exit neighbourhood)
+  min_improvement_R: 0.05      # a barrier exit is chosen over the best time stop only if its smoothed mean R is better by this much
+  f3_min_positive: 3           # F3: the chosen exit and its grid neighbours (up to 5 cells) with a positive mean R and enough episodes
+  require_f3: true             # candidates failing F3 stay in the table but are not frozen
+
+nulltest:                      # Stage 9 (M7): null test over the whole search (spec 13); labels rotated inside the train segment
+  replicates: 100              # spec: default 100, minimum 50 (fewer is flagged in the summary)
+  min_replicates: 50
+  quantile: 0.95               # threshold = this quantile of the null statistic
+  variants: [random, calendar] # random offsets; offsets that are multiples of one week keep the hour / weekday alignment (13.4)
+  week_bars: auto              # bars per calendar week for the calendar variant ("auto" = estimated from the index)
+  max_seconds: null            # optional time budget per call; finished replicates are kept and the run can be resumed
+
+validation:                    # Stage 10 (M8): frozen rules on the validation segment with the ENGINE, gates G1-G11, holdout protocol, outer walk-forward (spec 14)
+  max_rules: 50                # frozen representatives tested on validation, best plateau_score first (train-only ranking); K of the Bonferroni correction = the number tested
+  alpha: 0.05                  # one-sided; per-rule threshold = alpha / K (Bonferroni over the K frozen rules)
+  decay_min_ratio: 0.5         # G5: validation net expectancy (R) >= this x the TRAIN smoothed expectancy of the chosen exit (never the raw peak)
+  lift_t_min: 1.5              # G4: lift over BOTH parents on validation rows, same rule as F5 on train (candidates.lift_t_min)
+  min_trades_val: 50           # G6; raise for lower timeframes
+  cost_stress_mult: 1.5        # G7: spread and slippage multiplied by this (engine.cost_multiplier); expectancy must stay > 0
+  min_profit_factor: 1.15      # G8
+  max_equity_drawdown_pct: 30.0  # G8: maximum equity drawdown on the validation window, in % of the peak equity
+  require_g1: true             # a rule is eligible for the holdout only when the null test (stage 9) passed
+  open_holdout: false          # stage 10 never opens the holdout unless this is true (or scripts/open_holdout.py is run); opening is logged once in the manifest
+  min_holdout_trades: 20       # G10: fewer holdout trades is INCONCLUSIVE, not a pass
+  walkforward:                 # outer walk-forward: the WHOLE procedure (stages 0-8) on rolling windows, evaluated on the next test window with the engine (spec 14.3)
+    mode: bars                 # bars | calendar
+    train_bars: 12000
+    test_bars: 3000
+    step_bars: 3000
+    train_years: 2.0           # calendar mode
+    test_years: 0.5
+    step_years: 0.5
+    max_rules_per_window: 10   # the selection rule of the procedure: best plateau_score first (train-only)
+    require_null_approx: false # true: only rules whose best-family t beats the null threshold of the FULL train run (an approximation, flagged in the report)
+    min_window_bars: 3000      # a window whose train part is shorter than this is skipped
+
+codegen:                       # Stage 12 (M10): MQL5 generator (spec 16). Source columns whose indicator call cannot be read from the name must be given here.
+  indicators: {}               # e.g. {sar_002_02: {create: "iSAR(_Symbol,TF,0.02,0.2)", buffer: 0}}; TF is the EA timeframe constant; add verified: true once checked against dataExporter.mq5

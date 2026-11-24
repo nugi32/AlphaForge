@@ -1,0 +1,13 @@
+feature,what,reason,support
+gap_atr,== 0,support outside limits,1.0
+bars_since_rsi14_below30,p40 (50),support outside limits,1.0
+bars_since_rsi14_below30,p50,duplicate threshold (ties),
+bars_since_rsi14_below30,p60,duplicate threshold (ties),
+bars_since_rsi14_below30,p70,duplicate threshold (ties),
+bars_since_rsi14_below30,p80,duplicate threshold (ties),
+bars_since_rsi14_below30,p90,duplicate threshold (ties),
+bars_since_rsi14_above70,p50 (50),support outside limits,1.0
+bars_since_rsi14_above70,p60,duplicate threshold (ties),
+bars_since_rsi14_above70,p70,duplicate threshold (ties),
+bars_since_rsi14_above70,p80,duplicate threshold (ties),
+bars_since_rsi14_above70,p90,duplicate threshold (ties),

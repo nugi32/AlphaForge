@@ -1,0 +1,23 @@
+# GBPUSD H1 - contoh; spread dan swap lebih besar dari EURUSD. Sesuaikan dengan broker Anda.
+costs:
+  point: 0.00001
+  digits: 5
+  contract_size: 100000
+  fixed_spread_points: 12
+  slippage_points: 2
+  commission_per_lot_per_side: 3.5
+  swap_long_per_lot: -6.5
+  swap_short_per_lot: 1.8
+  swap_rollover_hour: 0
+  swap_triple_weekday: 2
+
+engine:
+  fidelity: open_prices_only
+  initial_deposit: 10000.0
+  sizing_mode: risk_percent          # contoh: risk_percent butuh stop (exit B / I atau cat_stop_atr)
+  risk_percent: 0.5
+  no_weekend_hold: true
+
+backtest:
+  segments: [train, val]
+  account_currency: USD

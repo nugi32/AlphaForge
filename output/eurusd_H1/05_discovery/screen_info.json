@@ -1,0 +1,38 @@
+{
+  "n_atoms": 1197,
+  "n_legal_pairs": 708093,
+  "n_tiles": 15,
+  "n_train_rows": 4034,
+  "n_survivors": 0,
+  "n_survivors_before_cap": 0,
+  "truncated": false,
+  "survivors_by_direction": {
+    "long": 0,
+    "short": 0
+  },
+  "labels": [
+    "long_T3",
+    "long_T12",
+    "long_B2_1_12",
+    "short_T3",
+    "short_T12",
+    "short_B2_1_12"
+  ],
+  "label_sd": [
+    1.6006408960920246,
+    3.2802609497139246,
+    1.8674897790519203,
+    1.5796167040346765,
+    3.215431132806573,
+    1.9981399744539858
+  ],
+  "label_hold": [
+    3.0,
+    12.0,
+    12.0,
+    3.0,
+    12.0,
+    12.0
+  ],
+  "seconds": 2.77
+}

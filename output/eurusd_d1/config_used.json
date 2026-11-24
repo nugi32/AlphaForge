@@ -1,0 +1,696 @@
+{
+  "data": {
+    "timeframe": "D1",
+    "timeframe_minutes": 1440,
+    "train_pct": 0.6,
+    "val_pct": 0.22,
+    "holdout_pct": 0.18,
+    "embargo_margin_bars": 6,
+    "max_gap_hours": 96.0,
+    "source": "mql5_loader",
+    "spread_from_data": true,
+    "allow_unprocessed": false
+  },
+  "qa": {
+    "min_time_parse_fraction": 0.99,
+    "gap_factor": 2.0,
+    "nan_column_threshold": 0.01,
+    "alignment_tolerance": 0.0001,
+    "expected_bars_per_year": 260,
+    "bars_per_year_tolerance": 0.25,
+    "nan_column_threshold_by_prefix": {
+      "news_": 0.5
+    }
+  },
+  "features": {
+    "atr_column": "atr_14",
+    "corr_cluster_threshold": 0.9,
+    "roll_window_vol": 100,
+    "roll_window_volume": 100,
+    "include_calendar_news": true,
+    "mom_center": 100.0,
+    "event_cap_bars": 50,
+    "breakout_n": 20,
+    "return_k": [
+      1,
+      3,
+      6,
+      12,
+      24
+    ],
+    "slope_k": [
+      3,
+      10
+    ],
+    "nbar_hilo": [
+      20,
+      50
+    ],
+    "leakcheck": "auto"
+  },
+  "labels": {
+    "atr_column": "atr_14",
+    "time_stops": [
+      1,
+      2,
+      3,
+      6,
+      12,
+      24
+    ],
+    "barrier_grid": {
+      "tp": [
+        1,
+        2,
+        3
+      ],
+      "sl": [
+        1,
+        1.5,
+        2
+      ],
+      "horizon": [
+        12,
+        24
+      ]
+    },
+    "intrabar_families": true,
+    "cat_stop_atr": null
+  },
+  "costs": {
+    "point": 1e-05,
+    "digits": 5,
+    "contract_size": 100000,
+    "fixed_spread_points": 12,
+    "slippage_points": 0,
+    "commission_per_lot_per_side": 0,
+    "swap_long_per_lot": 0,
+    "swap_short_per_lot": 0,
+    "swap_rollover_hour": 0,
+    "swap_triple_weekday": 2
+  },
+  "seed": 12345,
+  "engine": {
+    "fidelity": "open_prices_only",
+    "reenter_on_exit_bar": false,
+    "conflict_policy": "skip",
+    "max_open_positions": 1,
+    "close_open_at_end": false,
+    "cost_multiplier": 1.0,
+    "no_weekend_hold": true,
+    "cat_stop_atr": null,
+    "account_mode": "hedging",
+    "sizing_mode": "fixed_lots",
+    "fixed_lots": 0.1,
+    "risk_percent": 1.0,
+    "lot_step": 0.01,
+    "lot_min": 0.01,
+    "lot_max": 100.0,
+    "initial_deposit": 10000.0,
+    "compounding": false
+  },
+  "backtest": {
+    "segments": [
+      "train",
+      "val"
+    ],
+    "account_currency": "",
+    "symbol": "SYMBOL",
+    "chart": {
+      "enabled": true,
+      "filename": "equity_balance.png",
+      "dpi": 150,
+      "width": 14.0,
+      "height": 8.0,
+      "drawdown_panel": true,
+      "crop_to_trades": true,
+      "stats_box": true
+    }
+  },
+  "deep": {
+    "apriori": {
+      "enabled": true,
+      "max_atoms": 4,
+      "beam_triple": 5000,
+      "beam_quad": 2000,
+      "tile": 256,
+      "max_survivors": 100000,
+      "include_in_null": true
+    },
+    "trees": {
+      "enabled": true,
+      "max_depth": [
+        3,
+        4
+      ],
+      "include_in_null": true,
+      "families": [
+        "T6",
+        "B2_1_12"
+      ],
+      "n_trees": 200,
+      "min_leaf_rows": 200,
+      "feature_frac": 0.4,
+      "winsor_R": 3.0,
+      "min_hits": 2,
+      "max_rules": 2000,
+      "seed": null
+    }
+  },
+  "reporting": {
+    "run_summary": true,
+    "per_rule_reports": true,
+    "per_rule_segments": [
+      "train",
+      "val"
+    ],
+    "max_per_rule": 25
+  },
+  "eda": {
+    "n_bins": 10,
+    "max_categorical_levels": 10,
+    "cluster": "week",
+    "min_n_cell": 200,
+    "min_n_period": 50,
+    "min_periods": 3,
+    "t_min": "auto",
+    "alpha": 0.05,
+    "min_t_gross_mean": 2.0,
+    "stop_on_no_go": false,
+    "min_frac_positive_periods": 0.7,
+    "weak_lift_R": 0.05
+  },
+  "atoms": {
+    "quantile_pcts": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90
+    ],
+    "min_support": 0.01,
+    "max_categorical_levels": 10,
+    "threshold_sig_digits": 6
+  },
+  "discovery": {
+    "screen_families": [
+      "T3",
+      "T12",
+      "B2_1_12"
+    ],
+    "target": "net",
+    "n_folds": 5,
+    "min_rows_screen": 500,
+    "min_rows_fold": 20,
+    "t_screen": 2.0,
+    "min_pos_folds": 4,
+    "min_labels_pass": 2,
+    "tile": 256,
+    "chunk_rows": 4096,
+    "matmul_dtype": "float32",
+    "max_survivors": 100000
+  },
+  "candidates": {
+    "dedup_corr": 0.7,
+    "cluster_extra": null,
+    "bootstrap_n": 200,
+    "min_episodes_train": 200,
+    "t_exact": 2.5,
+    "lift_t_min": 1.5,
+    "lift_block_mult": 5,
+    "min_families_pass": 2,
+    "dedup_jaccard": 0.6,
+    "cache_atoms": 4096
+  },
+  "filters": {
+    "f8_enabled": true,
+    "f8_noise_se": 1.0,
+    "min_pos_folds": 4,
+    "min_pos_period_share": 0.7,
+    "min_periods": 3,
+    "min_episodes_period": 10,
+    "max_period_profit_share": 0.5,
+    "max_top5_episode_share": 0.3,
+    "min_loyo_share": 0.8,
+    "cost_stress_mult": 1.5,
+    "plateau_steps": 2,
+    "plateau_min_ratio": 0.5,
+    "plateau_min_pos_share": 0.8,
+    "plateau_min_obs": 30,
+    "mono_min_points": 4
+  },
+  "exits": {
+    "min_improvement_R": 0.05,
+    "f3_min_positive": 3,
+    "require_f3": true
+  },
+  "nulltest": {
+    "replicates": 100,
+    "min_replicates": 50,
+    "quantile": 0.95,
+    "variants": [
+      "random",
+      "calendar"
+    ],
+    "week_bars": "auto",
+    "max_seconds": null
+  },
+  "validation": {
+    "max_rules": 50,
+    "alpha": 0.05,
+    "decay_min_ratio": 0.5,
+    "lift_t_min": 1.5,
+    "min_trades_val": 50,
+    "cost_stress_mult": 1.5,
+    "min_profit_factor": 1.15,
+    "max_equity_drawdown_pct": 30.0,
+    "require_g1": true,
+    "open_holdout": false,
+    "min_holdout_trades": 20,
+    "walkforward": {
+      "mode": "bars",
+      "train_bars": 12000,
+      "test_bars": 3000,
+      "step_bars": 3000,
+      "train_years": 2.0,
+      "test_years": 0.5,
+      "step_years": 0.5,
+      "max_rules_per_window": 10,
+      "require_null_approx": false,
+      "min_window_bars": 3000
+    }
+  },
+  "codegen": {
+    "indicators": {
+      "ma_5_sma": {
+        "create": "iMA(_Symbol,TF,5,0,MODE_SMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_5_ema": {
+        "create": "iMA(_Symbol,TF,5,0,MODE_EMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_5_smma": {
+        "create": "iMA(_Symbol,TF,5,0,MODE_SMMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_5_lwma": {
+        "create": "iMA(_Symbol,TF,5,0,MODE_LWMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_10_sma": {
+        "create": "iMA(_Symbol,TF,10,0,MODE_SMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_10_ema": {
+        "create": "iMA(_Symbol,TF,10,0,MODE_EMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_10_smma": {
+        "create": "iMA(_Symbol,TF,10,0,MODE_SMMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_10_lwma": {
+        "create": "iMA(_Symbol,TF,10,0,MODE_LWMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_20_sma": {
+        "create": "iMA(_Symbol,TF,20,0,MODE_SMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_20_ema": {
+        "create": "iMA(_Symbol,TF,20,0,MODE_EMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_20_smma": {
+        "create": "iMA(_Symbol,TF,20,0,MODE_SMMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_20_lwma": {
+        "create": "iMA(_Symbol,TF,20,0,MODE_LWMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_50_sma": {
+        "create": "iMA(_Symbol,TF,50,0,MODE_SMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_50_ema": {
+        "create": "iMA(_Symbol,TF,50,0,MODE_EMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_50_smma": {
+        "create": "iMA(_Symbol,TF,50,0,MODE_SMMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_50_lwma": {
+        "create": "iMA(_Symbol,TF,50,0,MODE_LWMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_100_sma": {
+        "create": "iMA(_Symbol,TF,100,0,MODE_SMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_100_ema": {
+        "create": "iMA(_Symbol,TF,100,0,MODE_EMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_100_smma": {
+        "create": "iMA(_Symbol,TF,100,0,MODE_SMMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_100_lwma": {
+        "create": "iMA(_Symbol,TF,100,0,MODE_LWMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_200_sma": {
+        "create": "iMA(_Symbol,TF,200,0,MODE_SMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_200_ema": {
+        "create": "iMA(_Symbol,TF,200,0,MODE_EMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_200_smma": {
+        "create": "iMA(_Symbol,TF,200,0,MODE_SMMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ma_200_lwma": {
+        "create": "iMA(_Symbol,TF,200,0,MODE_LWMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "dema_10": {
+        "create": "iDEMA(_Symbol,TF,10,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "dema_20": {
+        "create": "iDEMA(_Symbol,TF,20,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "dema_50": {
+        "create": "iDEMA(_Symbol,TF,50,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "tema_10": {
+        "create": "iTEMA(_Symbol,TF,10,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "tema_20": {
+        "create": "iTEMA(_Symbol,TF,20,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "tema_50": {
+        "create": "iTEMA(_Symbol,TF,50,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "frama_14": {
+        "create": "iFrAMA(_Symbol,TF,14,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "frama_20": {
+        "create": "iFrAMA(_Symbol,TF,20,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ama_10_2_30": {
+        "create": "iAMA(_Symbol,TF,10,2,30,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "vidya_9": {
+        "create": "iVIDyA(_Symbol,TF,9,12,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "vidya_12": {
+        "create": "iVIDyA(_Symbol,TF,12,12,0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "sar_002_02": {
+        "create": "iSAR(_Symbol,TF,0.02,0.2)",
+        "buffer": 0,
+        "verified": true
+      },
+      "sar_001_02": {
+        "create": "iSAR(_Symbol,TF,0.01,0.2)",
+        "buffer": 0,
+        "verified": true
+      },
+      "sar_003_02": {
+        "create": "iSAR(_Symbol,TF,0.03,0.2)",
+        "buffer": 0,
+        "verified": true
+      },
+      "adx_14": {
+        "create": "iADX(_Symbol,TF,14)",
+        "buffer": 0,
+        "verified": true
+      },
+      "adxwilder_14": {
+        "create": "iADXWilder(_Symbol,TF,14)",
+        "buffer": 0,
+        "verified": true
+      },
+      "rsi_7": {
+        "create": "iRSI(_Symbol,TF,7,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "rsi_14": {
+        "create": "iRSI(_Symbol,TF,14,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "rsi_21": {
+        "create": "iRSI(_Symbol,TF,21,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "stoch_5_3_3_k": {
+        "create": "iStochastic(_Symbol,TF,5,3,3,MODE_SMA,STO_LOWHIGH)",
+        "buffer": 0,
+        "verified": true
+      },
+      "stoch_5_3_3_d": {
+        "create": "iStochastic(_Symbol,TF,5,3,3,MODE_SMA,STO_LOWHIGH)",
+        "buffer": 1,
+        "verified": true
+      },
+      "stoch_14_3_3_k": {
+        "create": "iStochastic(_Symbol,TF,14,3,3,MODE_SMA,STO_LOWHIGH)",
+        "buffer": 0,
+        "verified": true
+      },
+      "stoch_14_3_3_d": {
+        "create": "iStochastic(_Symbol,TF,14,3,3,MODE_SMA,STO_LOWHIGH)",
+        "buffer": 1,
+        "verified": true
+      },
+      "cci_14": {
+        "create": "iCCI(_Symbol,TF,14,PRICE_TYPICAL)",
+        "buffer": 0,
+        "verified": true
+      },
+      "cci_20": {
+        "create": "iCCI(_Symbol,TF,20,PRICE_TYPICAL)",
+        "buffer": 0,
+        "verified": true
+      },
+      "wpr_14": {
+        "create": "iWPR(_Symbol,TF,14)",
+        "buffer": 0,
+        "verified": true
+      },
+      "mom_10": {
+        "create": "iMomentum(_Symbol,TF,10,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "mom_14": {
+        "create": "iMomentum(_Symbol,TF,14,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "macd_12_26_9_main": {
+        "create": "iMACD(_Symbol,TF,12,26,9,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "macd_12_26_9_signal": {
+        "create": "iMACD(_Symbol,TF,12,26,9,PRICE_CLOSE)",
+        "buffer": 1,
+        "verified": true
+      },
+      "osma_12_26_9": {
+        "create": "iOsMA(_Symbol,TF,12,26,9,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "demarker_14": {
+        "create": "iDeMarker(_Symbol,TF,14)",
+        "buffer": 0,
+        "verified": true
+      },
+      "rvi_10": {
+        "create": "iRVI(_Symbol,TF,10)",
+        "buffer": 0,
+        "verified": true
+      },
+      "trix_14": {
+        "create": "iTriX(_Symbol,TF,14,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ac": {
+        "create": "iAC(_Symbol,TF)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ao": {
+        "create": "iAO(_Symbol,TF)",
+        "buffer": 0,
+        "verified": true
+      },
+      "bears_13": {
+        "create": "iBearsPower(_Symbol,TF,13)",
+        "buffer": 0,
+        "verified": true
+      },
+      "bulls_13": {
+        "create": "iBullsPower(_Symbol,TF,13)",
+        "buffer": 0,
+        "verified": true
+      },
+      "atr_14": {
+        "create": "iATR(_Symbol,TF,14)",
+        "buffer": 0,
+        "verified": true
+      },
+      "atr_20": {
+        "create": "iATR(_Symbol,TF,20)",
+        "buffer": 0,
+        "verified": true
+      },
+      "bb_20_2_upper": {
+        "create": "iBands(_Symbol,TF,20,0,2.0,PRICE_CLOSE)",
+        "buffer": 1,
+        "verified": true
+      },
+      "bb_20_2_middle": {
+        "create": "iBands(_Symbol,TF,20,0,2.0,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "bb_20_2_lower": {
+        "create": "iBands(_Symbol,TF,20,0,2.0,PRICE_CLOSE)",
+        "buffer": 2,
+        "verified": true
+      },
+      "bb_20_15_upper": {
+        "create": "iBands(_Symbol,TF,20,0,1.5,PRICE_CLOSE)",
+        "buffer": 1,
+        "verified": true
+      },
+      "bb_20_15_middle": {
+        "create": "iBands(_Symbol,TF,20,0,1.5,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "bb_20_15_lower": {
+        "create": "iBands(_Symbol,TF,20,0,1.5,PRICE_CLOSE)",
+        "buffer": 2,
+        "verified": true
+      },
+      "bb_20_25_upper": {
+        "create": "iBands(_Symbol,TF,20,0,2.5,PRICE_CLOSE)",
+        "buffer": 1,
+        "verified": true
+      },
+      "bb_20_25_middle": {
+        "create": "iBands(_Symbol,TF,20,0,2.5,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "bb_20_25_lower": {
+        "create": "iBands(_Symbol,TF,20,0,2.5,PRICE_CLOSE)",
+        "buffer": 2,
+        "verified": true
+      },
+      "stddev_20": {
+        "create": "iStdDev(_Symbol,TF,20,0,MODE_SMA,PRICE_CLOSE)",
+        "buffer": 0,
+        "verified": true
+      },
+      "envelope_20_01_upper": {
+        "create": "iEnvelopes(_Symbol,TF,20,0,MODE_SMA,PRICE_CLOSE,0.1)",
+        "buffer": 0,
+        "verified": true
+      },
+      "envelope_20_01_lower": {
+        "create": "iEnvelopes(_Symbol,TF,20,0,MODE_SMA,PRICE_CLOSE,0.1)",
+        "buffer": 1,
+        "verified": true
+      },
+      "obv": {
+        "create": "iOBV(_Symbol,TF,VOLUME_TICK)",
+        "buffer": 0,
+        "verified": true
+      },
+      "ad": {
+        "create": "iAD(_Symbol,TF,VOLUME_TICK)",
+        "buffer": 0,
+        "verified": true
+      },
+      "mfi_14": {
+        "create": "iMFI(_Symbol,TF,14,VOLUME_TICK)",
+        "buffer": 0,
+        "verified": true
+      },
+      "force_13": {
+        "create": "iForce(_Symbol,TF,13,MODE_SMA,VOLUME_TICK)",
+        "buffer": 0,
+        "verified": true
+      },
+      "chaikin_3_10": {
+        "create": "iChaikin(_Symbol,TF,3,10,MODE_EMA,VOLUME_TICK)",
+        "buffer": 0,
+        "verified": true
+      }
+    }
+  }
+}
