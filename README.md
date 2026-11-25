@@ -27,6 +27,16 @@ python scripts/run_mql5_pipeline.py run \
   --csv data/EURUSD/EURUSD_H1.csv \
   --out output/eurusd_H1 \
   --through 13
+
+  python scripts/run_mql5_pipeline.py run \
+  --csv data/EURUSD/EURUSD_H1.csv \
+  --out output/eurusd_H1 \
+  --through 13
+
+    python scripts/run_mql5_pipeline.py run \
+  --csv data/EURUSD/EURUSD_M1.csv \
+  --out output/eurusd_M1 \
+  --through 13
 ```
 Validation (stage 10, holdout stays closed), engine backtest of accepted rules (stage 11), outer walk-forward, and the one-time holdout opening:
 `python scripts/run_stages_0_10.py ...` / `run_stages_0_11.py ...` / `run_walkforward.py --csv ... --run output/run1` / `open_holdout.py --run output/run1 --yes-i-will-not-tune-after-this`.

@@ -280,10 +280,9 @@ def validate_export_schema(df: pd.DataFrame) -> dict:
     elif all(bool(np.isnan(df[c].to_numpy()).all()) for c in news_present):
         report["custom_groups_empty"].append("news")
         logger.warning(
-            "news_*: every value is NaN. The EA writes NaN when it could not load the calendar CSV in "
-            "the tester. Run dataExporter.mq5 once on a LIVE chart to create economic_calendar.csv "
-            "(Common\\Files), then re-run the tester export. These all-NaN columns are excluded from "
-            "feature generation; the pipeline continues with a warning."
+            f"news_*: all {len(news_present)} news columns are NaN (the EA could not load the calendar CSV in the tester; "
+            "to fill them run dataExporter.mq5 once on a LIVE chart to create economic_calendar.csv in Common\\Files, then re-export). "
+            "Warning only: these columns are excluded from the features and the run continues."
         )
     else:
         report["custom_groups_present"].append("news")

@@ -517,8 +517,14 @@ def _sha_file(path: Path) -> str:
 
 
 def _read_null_flags(run: Path) -> Optional[pd.DataFrame]:
+    """Stage 9 ``rule_flags.csv``; None when it is missing OR empty (no rule passed the search: the file is written without a single column)."""
     p = run / "09_null" / "rule_flags.csv"
-    return pd.read_csv(p) if p.exists() else None
+    if not p.exists():
+        return None
+    try:
+        return pd.read_csv(p)
+    except pd.errors.EmptyDataError:
+        return None
 
 
 def apply_holdout_verdicts(table: pd.DataFrame, rules, manifest: Dict[str, Any], results: Optional[Dict[str, Any]]) -> pd.DataFrame:

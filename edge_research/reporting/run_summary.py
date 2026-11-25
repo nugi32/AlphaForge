@@ -27,7 +27,12 @@ def _read_json(path: Path) -> Optional[Dict[str, Any]]:
 
 
 def _read_csv(path: Path) -> Optional[pd.DataFrame]:
-    return pd.read_csv(path) if path.exists() else None
+    if not path.exists():
+        return None
+    try:
+        return pd.read_csv(path)
+    except pd.errors.EmptyDataError:                 # a stage with no rule writes a CSV without columns
+        return None
 
 
 def _fmt(x: Any, nd: int = 3) -> str:
@@ -58,10 +63,12 @@ def gate_log(run: Path) -> Optional[pd.DataFrame]:
     src = run / "10_validation" / "gate_table.csv"
     if not src.exists():
         return None
-    t = pd.read_csv(src)
+    t = _read_csv(src)                                           # None = a gate table written without a column (nothing frozen)
     base = ["rule_id", "cand_id", "direction", "exit", "k_tested", "expr",
             "val_trades", "val_mean_R", "val_t", "t_crit_bonferroni", "decay_ratio", "val_profit_factor", "val_equity_dd_pct",
             "stress_mean_R", "stress_net_profit", "lift_min_t_train", "lift_min_t_val", "fail_reasons"]
+    if t is None:
+        t = pd.DataFrame(columns=base)
     cols = [c for c in base if c in t.columns] + [c for c in GATE_COLS if c in t.columns] + [c for c in ("g1_null", "accepted", "eligible_for_holdout", "g10_holdout") if c in t.columns]
     out = t.reindex(columns=cols)
     if len(out) and "expr" in out.columns:                       # the expression is long; the log stays readable by keeping one line per rule

@@ -7,6 +7,7 @@ The configuration is layered (later wins): ``config/default.yaml`` < values deri
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -91,7 +92,33 @@ def audit_file(csv_path: str | Path, cfg: Optional[Dict[str, Any]] = None, user_
     return {"table": table, "cfg": cfg, "audit": audit, "markdown": audit_markdown(audit)}
 
 
-def run_pipeline(csv_path: str | Path, out_dir: str | Path, through: int = 2, user_config: Optional[str | Path] = None, symbol: Optional[str] = None, digits: Optional[int] = None,
+class _LogOnce(logging.Filter):
+    """Drops a log record whose level and text were already seen: the exporter CSV is read twice per run (coverage audit, then stage 0 ingest), which printed every NaN warning twice."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.seen: set = set()
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        key = (record.levelno, record.getMessage())
+        if key in self.seen:
+            return False
+        self.seen.add(key)
+        return True
+
+
+def run_pipeline(csv_path: str | Path, out_dir: str | Path, through: int = 2, **kw: Any) -> Dict[str, Any]:
+    """Run stages 0..``through`` on ONE exporter CSV (see :func:`_run_pipeline`); repeated ingest warnings are printed once."""
+    lg = logging.getLogger("edge_research.ingestion.loader")
+    once = _LogOnce()
+    lg.addFilter(once)
+    try:
+        return _run_pipeline(csv_path, out_dir, through, **kw)
+    finally:
+        lg.removeFilter(once)
+
+
+def _run_pipeline(csv_path: str | Path, out_dir: str | Path, through: int = 2, user_config: Optional[str | Path] = None, symbol: Optional[str] = None, digits: Optional[int] = None,
                  timeframe: Optional[str] = None, gate_news: bool = False, allow_unprocessed: bool = False, max_replicates: Optional[int] = None) -> Dict[str, Any]:
     """Run stages 0..``through`` on ONE exporter CSV. ``through`` is the number of the last stage function (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13)."""
     from edge_research import pipeline as P
@@ -109,7 +136,7 @@ def run_pipeline(csv_path: str | Path, out_dir: str | Path, through: int = 2, us
     sym = symbol or table.symbol or "SYMBOL"
     kwargs: Dict[str, Any] = {}
     if through >= 9 and max_replicates is not None:
-        kwargs["max_replicates"] = max_replicates
+        kwargs["max_replicates_this_call"] = max_replicates
     result = fn(csv_path, out, cfg, sym, None, **kwargs)                              # spread_csv=None: the spread comes from the data table
     pair_cfg = Path(DEFAULT_CONFIG_PATH.parent / "MT5_TESTER" / str(sym).upper() / f"{cfg['data']['timeframe']}.yaml")
     summary = {"symbol": sym, "timeframe": cfg["data"]["timeframe"], "csv": str(csv_path), "rows": int(len(table.df)), "repairs": table.repairs,
